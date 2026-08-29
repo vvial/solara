@@ -25,6 +25,23 @@ a {
 }
 
 input,
-button {
+button,
+select,
+textarea {
   font: inherit;
+}
+
+/* Organograma: cartao de agente em execucao */
+@keyframes pulsar {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.agente-rodando {
+  animation: pulsar 1.1s ease-in-out infinite;
 }

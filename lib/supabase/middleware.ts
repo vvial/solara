@@ -38,8 +38,11 @@ export async function atualizarSessao(request: NextRequest) {
   const ehPublica = ROTAS_PUBLICAS.some(
     (rota) => caminho === rota || caminho.startsWith(rota + "/"),
   );
+  // Rotas de API cuidam da propria autenticacao e respondem JSON; o
+  // middleware so renova a sessao, nao redireciona.
+  const ehApi = caminho.startsWith("/api/");
 
-  if (!user && !ehPublica) {
+  if (!user && !ehPublica && !ehApi) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

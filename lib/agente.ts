@@ -28,6 +28,26 @@ async function lerPrompt(area: Area, papel: NomeAgente): Promise<string> {
   return readFile(caminho, "utf-8");
 }
 
+// Alguns modelos devolvem o JSON dentro de uma cerca de codigo markdown
+// (```json ... ```), ou escrevem um raciocinio em texto solto antes dele,
+// mesmo quando o prompt pede so JSON. Tenta limpar os dois casos antes do
+// parse.
+function extrairJson(texto: string): string {
+  const semEspacos = texto.trim();
+
+  const comCerca = semEspacos.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (comCerca) return comCerca[1];
+
+  // Ha texto antes/depois do JSON: usa do primeiro '{' ao ultimo '}'.
+  const inicio = semEspacos.indexOf("{");
+  const fim = semEspacos.lastIndexOf("}");
+  if (inicio !== -1 && fim > inicio) {
+    return semEspacos.slice(inicio, fim + 1);
+  }
+
+  return semEspacos;
+}
+
 /**
  * Ponto unico de chamada a API da Anthropic. Todo agente passa por aqui.
  *
@@ -85,7 +105,7 @@ export async function agente<T = unknown>(
 
     let saida: T;
     try {
-      saida = JSON.parse(texto) as T;
+      saida = JSON.parse(extrairJson(texto)) as T;
     } catch {
       await supabase
         .from("execucoes_agentes")

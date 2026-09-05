@@ -17,7 +17,10 @@ Total a cobrar, total a devolver, total aguardando confirmação.
 ## Observação
 Uma frase, se houver algo que a diretoria precisa saber (ex.: mesmo cliente com dois problemas no mês).
 
-Responda somente com JSON:
+Responda SOMENTE com o JSON abaixo. Não escreva nenhuma análise, raciocínio ou
+texto antes dele — o primeiro caractere da sua resposta deve ser `{`. Resolva
+qualquer conflito entre hipóteses (mesmo título citado mais de uma vez, por
+exemplo) direto na escrita do relatório, sem narrar esse processo.
 {
   "relatorio_markdown": "texto completo em markdown",
   "acoes": ["Cobrar R$ 350,00 da Metalúrgica Andrade (saldo de T0001)", "..."]
@@ -27,3 +30,4 @@ Regras:
 - Some os valores a partir das hipóteses recebidas. Não estime.
 - Não repita a explicação inteira de cada Investigador; uma linha por divergência.
 - Onde a confiança do Investigador for menor que 0.7, escreva "a confirmar" na linha.
+- Nunca escreva texto fora do JSON, nem antes nem depois.
